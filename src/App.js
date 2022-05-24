@@ -18,6 +18,7 @@ class App extends React.Component {
       hasTrunfo: false,
       isSaveButtonDisabled: true,
       savedCards: [],
+      deleteCard: true,
     };
 
     this.onInputChange = this.onInputChange.bind(this);
@@ -69,11 +70,28 @@ class App extends React.Component {
     }
   }
 
+  verifyTrunfo = () => {
+    const { cardTrunfo } = this.state;
+    if (cardTrunfo === true) {
+      this.setState({ hasTrunfo: false });
+    } else {
+      this.setState({ hasTrunfo: false });
+    }
+  }
+
+  deleteLetter = (cardName) => {
+    const { savedCards } = this.state;
+    const cardList = savedCards.filter((card) => card.cardName !== cardName);
+    this.setState({
+      savedCards: cardList,
+    }, this.verifyTrunfo());
+  };
+
   render() {
     const { cardName, cardDescription, cardAttr1,
       cardAttr2, cardAttr3, cardImage, cardRare,
       cardTrunfo, hasTrunfo, isSaveButtonDisabled,
-      savedCards,
+      savedCards, deleteCard,
     } = this.state;
 
     return (
@@ -112,8 +130,12 @@ class App extends React.Component {
               cardAttr1={ card.cardAttr1 }
               cardAttr2={ card.cardAttr2 }
               cardAttr3={ card.cardAttr3 }
+              hasTrunfo={ card.hasTrunfo }
+              deleteCards={ deleteCard }
+              onDeleteChange={ this.deleteLetter } // voce tem que por uma condicional para esse botão so ser renderizado em uma das condições ;
               key={ card.cardName }
-            />))
+            />
+          ))
         }
       </div>
     );

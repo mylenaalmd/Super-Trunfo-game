@@ -5,7 +5,7 @@ class Card extends React.Component {
   render() {
     const { cardName, cardDescription, cardAttr1,
       cardAttr2, cardAttr3, cardImage, cardRare,
-      cardTrunfo } = this.props;
+      cardTrunfo, onDeleteChange, deleteCards } = this.props;
 
     return (
       <section className="cards">
@@ -19,6 +19,16 @@ class Card extends React.Component {
         </section>
         <p data-testid="rare-card">{cardRare}</p>
         { cardTrunfo === true ? <h3 data-testid="trunfo-card">Super Trunfo</h3> : null }
+        { deleteCards === true
+          && (
+            <button
+              type="button"
+              onClick={ () => onDeleteChange(cardName) }
+              data-testid="delete-button"
+            >
+              Excluir
+            </button>
+          )}
       </section>
     );
   }
@@ -32,5 +42,7 @@ Card.propTypes = {
   cardImage: PropTypes.string.isRequired,
   cardRare: PropTypes.string.isRequired,
   cardTrunfo: PropTypes.bool.isRequired,
+  onDeleteChange: PropTypes.func.isRequired,
+  deleteCards: PropTypes.bool.isRequired,
 };
 export default Card;
