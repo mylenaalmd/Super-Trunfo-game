@@ -42,7 +42,12 @@ Card.propTypes = {
   cardImage: PropTypes.string.isRequired,
   cardRare: PropTypes.string.isRequired,
   cardTrunfo: PropTypes.bool.isRequired,
-  onDeleteChange: PropTypes.func.isRequired,
-  deleteCards: PropTypes.bool.isRequired,
+  onDeleteChange: PropTypes.func,
+  deleteCards: PropTypes.bool,
+};
+
+Card.defaultProps = {
+  onDeleteChange: () => {},
+  deleteCards: false,
 };
 export default Card;

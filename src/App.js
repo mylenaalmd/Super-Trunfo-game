@@ -19,6 +19,7 @@ class App extends React.Component {
       isSaveButtonDisabled: true,
       savedCards: [],
       deleteCard: true,
+      inputFilter: '',
     };
 
     this.onInputChange = this.onInputChange.bind(this);
@@ -87,56 +88,83 @@ class App extends React.Component {
     }, this.verifyTrunfo());
   };
 
+  // onInputFilter = () => {
+  //   const { savedCards, inputFilter } = this.state;
+  //   if (inputFilter) {
+  //     const filterName = savedCards.filter((card) => card.cardRare === inputFilter);
+  //     this.setState({
+  //       savedCards: filterName,
+  //     });
+  //   }
+  // }
+
   render() {
     const { cardName, cardDescription, cardAttr1,
       cardAttr2, cardAttr3, cardImage, cardRare,
       cardTrunfo, hasTrunfo, isSaveButtonDisabled,
-      savedCards, deleteCard,
+      savedCards, deleteCard, inputFilter,
     } = this.state;
 
     return (
       <div>
-        <Form
-          cardName={ cardName }
-          cardDescription={ cardDescription }
-          cardAttr1={ cardAttr1 }
-          cardAttr2={ cardAttr2 }
-          cardAttr3={ cardAttr3 }
-          cardImage={ cardImage }
-          cardRare={ cardRare }
-          cardTrunfo={ cardTrunfo }
-          hasTrunfo={ hasTrunfo }
-          isSaveButtonDisabled={ isSaveButtonDisabled }
-          onInputChange={ this.onInputChange }
-          onSaveButtonClick={ this.onSaveButtonClick }
-        />
-        <Card
-          cardName={ cardName }
-          cardDescription={ cardDescription }
-          cardAttr1={ cardAttr1 }
-          cardAttr2={ cardAttr2 }
-          cardAttr3={ cardAttr3 }
-          cardImage={ cardImage }
-          cardRare={ cardRare }
-          cardTrunfo={ cardTrunfo }
-        />
-        <div />
-        {
-          savedCards.map((card) => (
-            <Card
-              cardName={ card.cardName }
-              cardDescription={ card.cardDescription }
-              cardImage={ card.cardImage }
-              cardAttr1={ card.cardAttr1 }
-              cardAttr2={ card.cardAttr2 }
-              cardAttr3={ card.cardAttr3 }
-              hasTrunfo={ card.hasTrunfo }
-              deleteCards={ deleteCard }
-              onDeleteChange={ this.deleteLetter } // voce tem que por uma condicional para esse botão so ser renderizado em uma das condições ;
-              key={ card.cardName }
+        <section>
+          <Form
+            cardName={ cardName }
+            cardDescription={ cardDescription }
+            cardAttr1={ cardAttr1 }
+            cardAttr2={ cardAttr2 }
+            cardAttr3={ cardAttr3 }
+            cardImage={ cardImage }
+            cardRare={ cardRare }
+            cardTrunfo={ cardTrunfo }
+            hasTrunfo={ hasTrunfo }
+            isSaveButtonDisabled={ isSaveButtonDisabled }
+            onInputChange={ this.onInputChange }
+            onSaveButtonClick={ this.onSaveButtonClick }
+          />
+          <Card
+            cardName={ cardName }
+            cardDescription={ cardDescription }
+            cardAttr1={ cardAttr1 }
+            cardAttr2={ cardAttr2 }
+            cardAttr3={ cardAttr3 }
+            cardImage={ cardImage }
+            cardRare={ cardRare }
+            cardTrunfo={ cardTrunfo }
+          />
+        </section>
+        <section>
+          <label htmlFor="filter">
+            Filtro:
+            <br />
+            <input
+              data-testid="name-filter"
+              type="text"
+              name="inputFilter"
+              value={ inputFilter }
+              onChange={ this.onInputChange }
             />
-          ))
-        }
+          </label>
+          <hr />
+          {
+            savedCards
+              .filter((card) => card.cardName.includes(inputFilter))
+              .map((card) => (
+                <Card
+                  cardName={ card.cardName }
+                  cardDescription={ card.cardDescription }
+                  cardImage={ card.cardImage }
+                  cardAttr1={ card.cardAttr1 }
+                  cardAttr2={ card.cardAttr2 }
+                  cardAttr3={ card.cardAttr3 }
+                  hasTrunfo={ card.hasTrunfo }
+                  deleteCards={ deleteCard }
+                  onDeleteChange={ this.deleteLetter } // voce tem que por uma condicional para esse botão so ser renderizado em uma das condições ;
+                  key={ card.cardName }
+                />
+              ))
+          }
+        </section>
       </div>
     );
   }
