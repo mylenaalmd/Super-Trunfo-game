@@ -20,6 +20,8 @@ class App extends React.Component {
       savedCards: [],
       deleteCard: true,
       inputFilter: '',
+      filterRare: 'todas',
+      filterTrunfo: false,
     };
 
     this.onInputChange = this.onInputChange.bind(this);
@@ -44,7 +46,7 @@ class App extends React.Component {
       cardAttr2: '0',
       cardAttr3: '0',
       cardImage: '',
-      cardRare: 'normal',
+      cardRare: '',
       hasTrunfo: cardTrunfo,
     }));
   }
@@ -88,21 +90,11 @@ class App extends React.Component {
     }, this.verifyTrunfo());
   };
 
-  // onInputFilter = () => {
-  //   const { savedCards, inputFilter } = this.state;
-  //   if (inputFilter) {
-  //     const filterName = savedCards.filter((card) => card.cardRare === inputFilter);
-  //     this.setState({
-  //       savedCards: filterName,
-  //     });
-  //   }
-  // }
-
   render() {
     const { cardName, cardDescription, cardAttr1,
       cardAttr2, cardAttr3, cardImage, cardRare,
       cardTrunfo, hasTrunfo, isSaveButtonDisabled,
-      savedCards, deleteCard, inputFilter,
+      savedCards, deleteCard, inputFilter, filterRare, filterTrunfo,
     } = this.state;
 
     return (
@@ -135,7 +127,7 @@ class App extends React.Component {
         </section>
         <section>
           <label htmlFor="filter">
-            Filtro:
+            Filtro Nome:
             <br />
             <input
               data-testid="name-filter"
@@ -145,10 +137,42 @@ class App extends React.Component {
               onChange={ this.onInputChange }
             />
           </label>
+          <br />
+          <label htmlFor="filterRare">
+            Raridade:
+            <br />
+            <select
+              data-testid="rare-filter"
+              name="filterRare"
+              value={ filterRare }
+              onChange={ this.onInputChange }
+              required
+            >
+              <option value="todas">Todas</option>
+              <option value="normal">Normal</option>
+              <option value="raro">Raro</option>
+              <option value="muito raro">Muito raro</option>
+            </select>
+          </label>
+          <br />
+          <label htmlFor="filterSuperTrunfo">
+            Filtro Super Trunfo
+            <input
+              type="checkbox"
+              name="filterTrunfo"
+              data-testid="trunfo-filter"
+              checked={ filterTrunfo }
+              onChange={ this.onInputChange }
+            />
+          </label>
           <hr />
           {
             savedCards
               .filter((card) => card.cardName.includes(inputFilter))
+              .filter((card) => (filterRare === 'todas' ? card.cardRare
+                : card.cardRare === filterRare))
+
+              // .filter((card) => filterTrunfo === true && card.cardRare)
               .map((card) => (
                 <Card
                   cardName={ card.cardName }
@@ -156,10 +180,12 @@ class App extends React.Component {
                   cardImage={ card.cardImage }
                   cardAttr1={ card.cardAttr1 }
                   cardAttr2={ card.cardAttr2 }
+                  cardTrunfo={ card.cardTrunfo }
                   cardAttr3={ card.cardAttr3 }
                   hasTrunfo={ card.hasTrunfo }
+                  cardRare={ card.cardRare }
                   deleteCards={ deleteCard }
-                  onDeleteChange={ this.deleteLetter } // voce tem que por uma condicional para esse botão so ser renderizado em uma das condições ;
+                  onDeleteChange={ this.deleteLetter }
                   key={ card.cardName }
                 />
               ))
